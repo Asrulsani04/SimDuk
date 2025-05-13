@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMDUK - Sistem Informasi Kependudukan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #3730a3;
+            --primary-light: #818cf8;
+            --secondary-color: #14b8a6; 
+            --accent-color: #0ea5e9;
+            --light-color: #f3f4f6;
+            --dark-color: #1e293b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --gray-100: #f9fafb;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--dark-color);
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--primary-dark), var(--primary-color));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 100;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.8rem;
+            color: white;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-header .logo-text {
+            background: linear-gradient(45deg, #fff, #d1d5db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .sidebar-menu {
+            padding: 1.5rem 0;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            padding: 0.9rem 1.5rem;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            position: relative;
+            margin: 0.2rem 0;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .menu-item i {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-item .menu-text {
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--gray-100);
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-200);
+        }
+
+        .search-box:focus-within {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .search-box i {
+            color: var(--gray-500);
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            padding: 0.25rem 0.8rem;
+            font-size: 0.9rem;
+            width: 300px;
+            color: var(--dark-color);
+        }
+
+        .search-box input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .user-profile:hover {
+            background-color: var(--gray-100);
+        }
+
+        .user-profile .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        /* Notification bell */
+        .notification {
+            position: relative;
+            margin-right: 1.5rem;
+            cursor: pointer;
+        }
+
+        .notification i {
+            font-size: 1.3rem;
+            color: var(--gray-500);
+        }
+
+        .notification .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Content */
+        .content {
+            padding: 2rem;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        /* Dashboard */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .stat-card .stat-icon {
+            margin-bottom: 1.5rem;
+            height: 50px;
+            width: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1);
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.95rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+        }
+
+        .trend-up {
+            color: var(--success-color);
+        }
+
+        .trend-down {
+            color: var(--danger-color);
+        }
+
+        .trend-icon {
+            margin-right: 4px;
+        }
+
+        .icon-people { background-color: rgba(79, 70, 229, 0.1); color: var(--primary-color); }
+        .icon-family { background-color: rgba(20, 184, 166, 0.1); color: var(--secondary-color); }
+        .icon-birth { background-color: rgba(245, 158, 11, 0.1); color: var(--warning-color); }
+        .icon-death { background-color: rgba(239, 68, 68, 0.1); color: var(--danger-color); }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .chart-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.8rem;
+            transition: all 0.3s;
+        }
+
+        .chart-card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-action {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--gray-100);
+            color: var(--gray-500);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chart-action:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .chart-container {
+            height: 280px;
+            position: relative;
+        }
+
+        .recent-activity {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.8rem;
+            transition: all 0.3s;
+        }
+
+        .recent-activity:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .activity-more {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .activity-more i {
+            margin-left: 4px;
+            font-size: 0.8rem;
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: flex-start;
+            transition: all 0.3s;
+        }
+
+        .activity-item:hover {
+            background-color: var(--gray-100);
+            border-radius: 8px;
+            padding-left: 1rem;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            margin-right: 1rem;
+            height: 40px;
+            width: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex-grow: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .activity-meta {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+        }
+
+        .activity-time i {
+            margin-right: 4px;
+            font-size: 0.75rem;
+        }
+
+        /* Data Tables */
+        .data-section {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--gray-100);
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tr {
+            border-bottom: 1px solid var(--gray-200);
+            transition: all 0.2s;
+        }
+
+        tr:hover {
+            background-color: var(--gray-50);
+        }
+
+        tr:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            font-size: 0.95rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-100);
+            color: var(--dark-color);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-200);
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 0.35rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .badge-primary {
+            background-color: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+        }
+
+        .badge-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .badge-warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .badge-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .badge i {
+            margin-right: 4px;
+            font-size: 0.75rem;
+        }
+
+        /* Cards */
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+
+            .sidebar-header h2, .menu-item .menu-text, .sidebar-footer .menu-text {
+                display: none;
+            }
+
+            .menu-item {
+                justify-content: center;
+                padding: 1rem 0;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+            }
+
+            .menu-item.active {
+                border-left: none;
+                border-bottom: 3px solid var(--secondary-color);
+            }
+
+            .menu-item i {
+                margin-right: 0;
+                font-size: 1.4rem;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 60px;
+                position: fixed;
+                bottom: 0;
+                z-index: 100;
+                flex-direction: row;
+            }
+
+            .sidebar-header, .sidebar-footer {
+                display: none;
+            }
+
+            .sidebar-menu {
+                flex-direction: row;
+                padding: 0;
+                justify-content: space-around;
+            }
+
+            .menu-item {
+                flex: 1;
+                flex-direction: column;
+                padding: 0.5rem 0;
+                font-size: 0.7rem;
+                border-bottom: none;
+                border-top: 3px solid transparent;
+            }
+
+            .menu-item.active {
+                border-bottom: none;
+                border-top: 3px solid var(--secondary-color);
+            }
+
+            .menu-item i {
+                margin-right: 0;
+                margin-bottom: 0.25rem;
+                font-size: 1.2rem;
+            }
+
+            .menu-item .menu-text {
+                display: block;
+                font-size: 0.7rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-bottom: 60px;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .user-profile .user-info {
+                display: none;
+            }
+
+            .content {
+                padding: 1.5rem 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .page-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="logo-text">SIMDUK</h2>
+            </div>
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item active">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span class="menu-text">Data Penduduk</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-house-user"></i>
+                    <span class="menu-text">Data Keluarga</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-baby"></i>
+                    <span class="menu-text">Kelahiran</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-cross"></i>
+                    <span class="menu-text">Kematian</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span class="menu-text">Pindah/Datang</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span class="menu-text">Laporan</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span class="menu-text">Pengaturan</span>
+                </a>
+            </div>
+            <div class="sidebar-footer">
+                <a href="#" class="menu-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="menu-text">Keluar</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari data penduduk, keluarga, atau dokumen...">
+                </div>
+                <div class="header-right" style="display: flex; align-items: center;">
+                    <div class="notification">
+                        <i class="far fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <div class="avatar">A</div>
+                        <div class="user-info">
+                            <div class="user-name">Admin</div>
+                            <div class="user-role">Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <div class="page-header">
+                    <h1 class="page-title animate__animated animate__fadeIn">Dashboard</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-calendar-alt"></i> 
+                            <span>Mei 2025</span>
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-download"></i> 
+                            <span>Export Data</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-container">
+                    <div class="stat-card fade-in" style="animation-delay: 0.1s;">
+                        <div class="stat-icon icon-people">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-value">12,345</div>
+                        <div class="stat-label">Total Penduduk</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up trend-icon"></i>
+                            <span>2.3% dari bulan lalu</span>
+                        </div>
+                    </div>
+                    <div class="stat-card fade-in" style="animation-delay: 0.2s;">
+                        <div class="stat-icon icon-family">
+                            <i class="fas fa-house-user"></i>
+                        </div>
+                        <div class="stat-value">3,567</div>
+                        <div class="stat-label">Total Keluarga</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up trend-icon"></i>
+                            <span>1.7% dari bulan lalu</span>
+                        </div>
+                    </div>
+                    <div class="stat-card fade-in" style="animation-delay: 0.3s;">
+                        <div class="stat-icon icon-birth">
+                            <i class="fas fa-baby"></i>
+                        </div>
+                        <div class="stat-value">120</div>
+                        <div class="stat-label">Kelahiran Tahun Ini</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up trend-icon"></i>
+                            <span>5.2% dari tahun lalu</span>
+                        </div>
+                    </div>
+                    <div class="stat-card fade-in" style="animation-delay: 0.4s;">
+                        <div class="stat-icon icon-death">
+                            <i class="fas fa-cross"></i>
+                        </div>
+                        <div class="stat-value">45</div>
+                        <div class="stat-label">Kematian Tahun Ini</div>
+                        <div class="stat-trend trend-down">
+                            <i class="fas fa-arrow-down trend-icon"></i>
+                            <span>2.1% dari tahun lalu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-container">
+                    <div class="chart-card fade-in" style="animation-delay: 0.5s;">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Pertumbuhan Penduduk</h3>
+                            <div class="chart-actions">
+                                <div class="chart-action"><i class="fas fa-sync-alt"></i></div>
+                                <div class="chart-action"><i class="fas fa-ellipsis-v"></i></div>
+                            </div>
+                        </div>
+                        <div class="chart-container" id="populationGrowthChart"></div>
+                    </div>
+                    <div class="chart-card fade-in" style="animation-delay: 0.6s;">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Distribusi Umur</h3>
+                            <div class="chart-actions">
+                                <div class="chart-action"><i class="fas fa-sync-alt"></i></div>
+                                <div class="chart-action"><i class="fas fa-ellipsis-v"></i></div>
+                            </div>
+                        </div>
+                        <div class="chart-container" id="ageDistributionChart"></div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity fade-in" style="animation-delay: 0.7s;">
+                    <div class="activity-header">
+                        <h3 class="activity-title">Aktivitas Terbaru</h3>
+                        <a href="#" class="activity-more">Lihat Semua <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                    <ul class="activity-list">
+                        <li class="activity-item">
+                            <div class="activity-icon icon-birth">
+                                <i class="fas fa-baby"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Penambahan data kelahiran: Budi Santoso</div>
+                                <div class="activity-meta">
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> 2 jam yang lalu
+                                    </div>
+                                    <div class="badge badge-success">
+                                        <i class="fas fa-check"></i> Terverifikasi
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <div class="activity-icon icon-people">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Penduduk baru: Siti Nurhayati (pindahan dari Kab. Bandung)</div>
+                                <div class="activity-meta">
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> 5 jam yang lalu
+                                    </div>
+                                    <div class="badge badge-warning">
+                                        <i class="fas fa-spinner fa-spin"></i> Menunggu Verifikasi
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <div class="activity-icon icon-family">
+                                <i class="fas fa-house-user"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Pembaruan data keluarga: Keluarga Ahmad Fauzi</div>
+                                <div class="activity-meta">
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> 1 hari yang lalu
+                                    </div>
+                                    <div class="badge badge-success">
+                                        <i class="fas fa-check"></i> Terverifikasi
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <div class="activity-icon icon-death">
+                                <i class="fas fa-cross"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Penambahan data kematian: H. Mahmud (82 tahun)</div>
+                                <div class="activity-meta">
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> 2 hari yang lalu
+                                    </div>
+                                    <div class="badge badge-success">
+                                        <i class="fas fa-check"></i> Terverifikasi
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Recent Registered Residents -->
+                <div class="data-section fade-in" style="animation-delay: 0.8s; margin-top: 2.5rem;">
+                    <div class="section-header">
+                        <h2 class="section-title">Penduduk Terdaftar Terbaru</h2>
+                        <div class="table-actions">
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <button class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i> Tambah Data
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>NIK</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Tanggal Lahir</th>
+                                    <th>Alamat</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>3275021504950003</td>
+                                    <td>Siti Nurhayati</td>
+                                    <td>Perempuan</td>
+                                    <td>15 Apr 1995</td>
+                                    <td>Jl. Mawar No. 12, RT 003/RW 005</td>
+                                    <td><span class="badge badge-warning">Menunggu Verifikasi</span></td>
+                                    <td>
+                                        <div class="actions">
+                                            <button class="btn btn-primary btn-sm btn-icon" title="Lihat Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-warning btn-sm btn-icon" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3275024506020001</td>
+                                    <td>Budi Santoso</td>
+                                    <td>Laki-laki</td>
+                                    <td>14 Mei 2025</td>
+                                    <td>Jl. Melati No. 7, RT 002/RW 004</td>
+                                    <td><span class="badge badge-success">Terverifikasi</span></td>
+                                    <td>
+                                        <div class="actions">
+                                            <button class="btn btn-primary btn-sm btn-icon" title="Lihat Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-warning btn-sm btn-icon" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3275021003990002</td>
+                                    <td>Ahmad Fauzi</td>
+                                    <td>Laki-laki</td>
+                                    <td>10 Mar 1999</td>
+                                    <td>Jl. Anggrek No. 23, RT 005/RW 002</td>
+                                    <td><span class="badge badge-success">Terverifikasi</span></td>
+                                    <td>
+                                        <div class="actions">
+                                            <button class="btn btn-primary btn-sm btn-icon" title="Lihat Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-warning btn-sm btn-icon" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3275022511980004</td>
+                                    <td>Dewi Lestari</td>
+                                    <td>Perempuan</td>
+                                    <td>25 Nov 1998</td>
+                                    <td>Jl. Dahlia No. 45, RT 001/RW 003</td>
+                                    <td><span class="badge badge-success">Terverifikasi</span></td>
+                                    <td>
+                                        <div class="actions">
+                                            <button class="btn btn-primary btn-sm btn-icon" title="Lihat Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-warning btn-sm btn-icon" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Chart.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <script>
+        // Toggle active menu item
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Initialize Population Growth Chart
+            const populationCtx = document.getElementById('populationGrowthChart').getContext('2d');
+            const populationChart = new Chart(populationCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                    datasets: [{
+                        label: 'Penduduk 2025',
+                        data: [12045, 12078, 12156, 12210, 12345, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Penduduk 2024',
+                        data: [11567, 11612, 11678, 11723, 11802, 11867, 11934, 12001, 12067, 12145, 12189, 12232],
+                        borderColor: '#14b8a6',
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 11500,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    animations: {
+                        tension: {
+                            duration: 1000,
+                            easing: 'linear'
+                        }
+                    }
+                }
+            });
+
+            // Initialize Age Distribution Chart
+            const ageCtx = document.getElementById('ageDistributionChart').getContext('2d');
+            const ageChart = new Chart(ageCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['0-5', '6-12', '13-17', '18-25', '26-35', '36-45', '46-55', '56-65', '65+'],
+                    datasets: [{
+                        label: 'Laki-laki',
+                        data: [682, 845, 721, 1245, 1456, 998, 765, 578, 342],
+                        backgroundColor: '#4f46e5',
+                        borderRadius: 4
+                    }, {
+                        label: 'Perempuan',
+                        data: [645, 823, 698, 1354, 1387, 932, 732, 621, 521],
+                        backgroundColor: '#14b8a6',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000
+                    }
+                }
+            });
+
+            // Add animations to elements when they come into view
+            const animatedElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            animatedElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

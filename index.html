@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -896,41 +896,41 @@
                 <h2 class="logo-text">SIMDUK</h2>
             </div>
             <div class="sidebar-menu">
-                <a href="#" class="menu-item active">
+                <a href="#" class="menu-item active" onclick="showDashboard()">
                     <i class="fas fa-chart-line"></i>
                     <span class="menu-text">Dashboard</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="data-penduduk.html" class="menu-item" onclick="showDataPenduduk()">
                     <i class="fas fa-users"></i>
                     <span class="menu-text">Data Penduduk</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="data-keluarga.html" class="menu-item" onclick="showDataKeluarga()">
                     <i class="fas fa-house-user"></i>
                     <span class="menu-text">Data Keluarga</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="kelahiran.html" class="menu-item" onclick="showKelahiran()">
                     <i class="fas fa-baby"></i>
                     <span class="menu-text">Kelahiran</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="kematian.html" class="menu-item" onclick="showKematian()">
                     <i class="fas fa-cross"></i>
                     <span class="menu-text">Kematian</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="pindah-datang.html" class="menu-item" onclick="showPindahDatang()">
                     <i class="fas fa-exchange-alt"></i>
                     <span class="menu-text">Pindah/Datang</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="laporan.html" class="menu-item">
                     <i class="fas fa-file-alt"></i>
                     <span class="menu-text">Laporan</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="pengaturan.html" class="menu-item" onclick="showPengaturan()">
                     <i class="fas fa-cog"></i>
                     <span class="menu-text">Pengaturan</span>
                 </a>
             </div>
             <div class="sidebar-footer">
-                <a href="#" class="menu-item">
+                <a href="#" class="menu-item" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i>
                     <span class="menu-text">Keluar</span>
                 </a>
@@ -1233,17 +1233,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     
     <script>
-        // Toggle active menu item
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuItems = document.querySelectorAll('.menu-item');
-            
-            menuItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    menuItems.forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
+            // Toggle active menu item
+            document.addEventListener('DOMContentLoaded', function() {
+                const menuItems = document.querySelectorAll('.menu-item');
+                
+                menuItems.forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        menuItems.forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                        // Navigate to the corresponding file
+                        const href = this.getAttribute('href');
+                        if (href) {
+                            window.location.href = href;
+                        }
+                    });
                 });
-            });
+
+                // Functions for menu items
+                function logout() {
+                    alert('Keluar clicked');
+                    // Add your logout logic here
+                }
 
             // Initialize Population Growth Chart
             const populationCtx = document.getElementById('populationGrowthChart').getContext('2d');

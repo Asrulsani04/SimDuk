@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laporan - SIMDUK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #3730a3;
+            --secondary-color: #14b8a6;
+            --dark-color: #1e293b;
+            --gray-100: #f9fafb;
+            --gray-200: #e5e7eb;
+            --gray-500: #6b7280;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #f8fafc;
+            color: var(--dark-color);
+        }
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--primary-dark), var(--primary-color));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 100;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sidebar-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #fff, #d1d5db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        .sidebar-menu {
+            padding: 1.5rem 0;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .menu-item {
+            padding: 0.9rem 1.5rem;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            margin: 0.2rem 0;
+        }
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left: 4px solid var(--secondary-color);
+        }
+        .menu-item i {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-text {
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .header {
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .content {
+            padding: 2rem;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="logo-text">SIMDUK</h2>
+            </div>
+            <div class="sidebar-menu">
+                <a href="index.html" class="menu-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                <a href="data-penduduk.html" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span class="menu-text">Data Penduduk</span>
+                </a>
+                <a href="data-keluarga.html" class="menu-item">
+                    <i class="fas fa-house-user"></i>
+                    <span class="menu-text">Data Keluarga</span>
+                </a>
+                <a href="kelahiran.html" class="menu-item">
+                    <i class="fas fa-baby"></i>
+                    <span class="menu-text">Kelahiran</span>
+                </a>
+                <a href="kematian.html" class="menu-item">
+                    <i class="fas fa-cross"></i>
+                    <span class="menu-text">Kematian</span>
+                </a>
+                <a href="pindah-datang.html" class="menu-item">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span class="menu-text">Pindah/Datang</span>
+                </a>
+                <a href="laporan.html" class="menu-item active">
+                    <i class="fas fa-file-alt"></i>
+                    <span class="menu-text">Laporan</span>
+                </a>
+                <a href="pengaturan.html" class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span class="menu-text">Pengaturan</span>
+                </a>
+            </div>
+            <div class="sidebar-footer">
+                <a href="#" class="menu-item" onclick="alert('Keluar clicked')">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="menu-text">Keluar</span>
+                </a>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">Laporan</h1>
+            </div>
+            <div class="content">
+                <p>Halaman ini berisi informasi dan data terkait laporan kependudukan.</p>
+                <p>Anda dapat melihat dan mengelola laporan di halaman ini.</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8fafc;
+        color: #1e293b;
+        padding: 2rem;
+    }
+
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+        margin-bottom: 1.5rem;
+        font-size: 1.6rem;
+        color: #4f46e5;
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1.2rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        outline: none;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .btn-submit {
+        background-color: #4f46e5;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn-submit:hover {
+        background-color: #3730a3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+    }
+
+    @media (max-width: 600px) {
+        body {
+            padding: 1rem;
+        }
+
+        .form-container {
+            padding: 1.5rem;
+        }
+    }
+</style>
+<body>
+    <h2>Form Pengajuan Perubahan Data Penduduk</h2>
+    <div class="form-container">
+        <h2>Form Pengajuan Perubahan Data</h2>
+        <form>
+            <label for="nik">NIK</label>
+            <input type="text" id="nik" name="nik" placeholder="Masukkan NIK" required>
+    
+            <label for="nama">Nama Lengkap</label>
+            <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
+    
+            <label for="perubahan">Perubahan yang Diajukan</label>
+            <textarea id="perubahan" name="perubahan" placeholder="Contoh: Alamat berubah dari Jl. A ke Jl. B" required></textarea>
+    
+            <button type="submit" class="btn-submit">Kirim Pengajuan</button>
+        </form>
+    </div>    
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+const jenis = urlParams.get('jenis');
+document.querySelector('h2').innerText = `Form Pengajuan Perubahan Data ${jenis.charAt(0).toUpperCase() + jenis.slice(1)}`;
+</script>
+</body>
+</html>
